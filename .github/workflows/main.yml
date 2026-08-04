@@ -1,0 +1,49 @@
+# Workflow name: This is the name displayed in the repository’s Actions tab
+name: E-Commerce CI
+
+# Workflow triggers: This runs the workflow whenever code is pushed to the main branch 
+on:
+  push:
+    branches:
+      - main
+  # This also runs the workflow when a pull request targets main 
+  pull_request:
+    branches:
+      - main
+
+# Job definition: This creates a job whose ID is test-and-build.
+jobs:
+  test-and-build:
+    # This gives the job a readable display name 
+    name: Test and Build
+    # GitHub runner: GitHub creates a temporary Ubuntu machine where the workflow runs 
+    # The project is checked out, dependencies are installed, tests run, and the production build is generated on that machine 
+    runs-on: ubuntu-latest
+
+    steps:
+      # Download repository code: The GitHub runner starts empty. This action downloads your repository code onto the runner 
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      # Configure Node.js: This installs Node.js 24 and configures npm.
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          # caches downloaded npm packages between workflow runs, which can make later runs faster
+          cache: "npm"
+
+      # Install exact dependencies: npm ci installs the exact dependency versions recorded in package-lock.json
+      - name: Install dependencies
+        run: npm ci
+
+      # Run Jest
+      - name: Run tests
+        # --runInBand makes Jest run the test suites sequentially in one process
+        # # If any test fails, this step exits with an error and GitHub stops the job 
+        run: npm test -- --runInBand
+
+      # Build the application
+      # It verifies that: TypeScript compiles. Vite creates the production bundle. The application is ready for deployment
+      - name: Build application
+        run: npm run build
