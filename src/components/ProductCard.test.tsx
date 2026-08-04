@@ -4,6 +4,10 @@ import { MemoryRouter } from "react-router-dom";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
+import ProductCard from "./ProductCard";
+import cartReducer from "../redux/cartSlice";
+import type { Product } from "../types/Product";
+
 // jest.mock() tells Jest: Don't use the real module. Instead, replace it with a fake version while running this test
 // "../services/api": This is the exact module that ProductCard imports
 jest.mock("../services/api", () => ({
@@ -11,10 +15,6 @@ jest.mock("../services/api", () => ({
   // jest.fn()creates a mock function. With the mock, the Firebase code is skipped entirely
   deleteProduct: jest.fn(),
 }));
-
-import ProductCard from "./ProductCard";
-import cartReducer from "../redux/cartSlice";
-import type { Product } from "../types/Product";
 
 // Creates a sample product used only during testing.
 const mockProduct = {
@@ -24,8 +24,9 @@ const mockProduct = {
   description:
     "A durable backpack created specifically for testing the ProductCard component.",
   category: "Accessories",
-  image: "https://media.istockphoto.com/id/2167589456/photo/yellow-backpack-opened-isolated-on-white-school-bag-advertisement-design-knapsack-rucksack.jpg?s=612x612&w=0&k=20&c=5B7A5M35ZEcneBbRoLWkIpPcij1HKTdPtkXEm71MMKI=",
-} as Product;
+  image: "test-backpack.jpg",
+// satisfies Product: TypeScript checks that the object actually follows the Product interface
+} satisfies Product;
 
 // Creates a fresh Redux store for each test
 function createTestStore() {
@@ -55,6 +56,8 @@ describe("ProductCard", () => {
   // This setup prevents a previous test or browser value from affecting the current test:
   beforeEach(() => {
     sessionStorage.clear();
+    // clears mocks helps keep the test file independent
+    jest.clearAllMocks(); 
   });
 
   // checks that users can see: Product title, Category, Price, Product image, and Add to Cart button
