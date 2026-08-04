@@ -264,7 +264,6 @@ function ShoppingCart() {
               disabled={isCheckingOut}
             >
               {isCheckingOut ? "Processing Order..." : "Checkout"}
-              Checkout
             </button>
           </div>
         </div>
