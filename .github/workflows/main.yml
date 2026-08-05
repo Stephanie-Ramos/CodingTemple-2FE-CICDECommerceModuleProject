@@ -1,27 +1,29 @@
 # Workflow name: This is the name displayed in the repository’s Actions tab
-name: E-Commerce CI
+name: E-Commerce CI/CD
 
-# Workflow triggers: This runs the workflow whenever code is pushed to the main branch 
+# Workflow triggers: This runs the workflow whenever code is pushed to the main branch
 on:
   push:
     branches:
       - main
-  # This also runs the workflow when a pull request targets main 
+  
+  # This also runs the workflow when a pull request targets main
   pull_request:
     branches:
       - main
 
-# Job definition: This creates a job whose ID is test-and-build.
+# Jobs definition
 jobs:
+  # This creates a job whose ID is test-and-build
   test-and-build:
-    # This gives the job a readable display name 
+    # This gives the job a readable display name
     name: Test and Build
-    # GitHub runner: GitHub creates a temporary Ubuntu machine where the workflow runs 
-    # The project is checked out, dependencies are installed, tests run, and the production build is generated on that machine 
+    # GitHub runner: GitHub creates a temporary Ubuntu machine where the workflow runs
+    # The project is checked out, dependencies are installed, tests run, and the production build is generated on that machine
     runs-on: ubuntu-latest
 
     steps:
-      # Download repository code: The GitHub runner starts empty. This action downloads your repository code onto the runner 
+      # Download repository code: The GitHub runner starts empty. This action downloads your repository code onto the runner
       - name: Check out repository
         uses: actions/checkout@v6
 
@@ -40,10 +42,90 @@ jobs:
       # Run Jest
       - name: Run tests
         # --runInBand makes Jest run the test suites sequentially in one process
-        # # If any test fails, this step exits with an error and GitHub stops the job 
+        # If any test fails, this step exits with an error and GitHub stops the job
         run: npm test -- --runInBand
 
       # Build the application
       # It verifies that: TypeScript compiles. Vite creates the production bundle. The application is ready for deployment
       - name: Build application
         run: npm run build
+  
+  # This creates a job whose ID is deploy
+  # This deployment job is the Continuous Deployment (CD) portion
+  deploy:
+      # This is the display name shown inside GitHub Actions 
+      name: Deploy to Vercel
+      # GitHub creates a temporary virtual machine running the latest Ubuntu operating system
+      runs-on: ubuntu-latest
+      # Do not start the deployment until the test-and-build job finishes successfully
+      # If any test fails, deployment never begins. If the build fails, deployment never begins.
+      needs: test-and-build
+
+      # run this job if only the workflow was triggered by a Git push to the main branch
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+      # Every job consists of a sequence of steps. GitHub runs them one at a time
+      steps:
+        # This is simply the name displayed in GitHub Actions
+        - name: Check out repository
+        # This downloads your GitHub repository onto the temporary runner
+        # Without checking out the repository, GitHub would have nothing to build or deploy
+          uses: actions/checkout@v6
+
+        - name: Set up Node.js
+          # This installs Node.js onto the GitHub runner 
+          uses: actions/setup-node@v4
+          # provides configuration options
+          with:
+            node-version: "24"
+            # GitHub saves downloaded npm packages between workflow runs
+            cache: "npm"
+
+        - name: Install Vercel CLI
+          # Instead of using a GitHub Action, this step executes terminal commands: pull, build, deploy
+          run: npm install --global vercel@latest
+
+        # This step synchronizes the GitHub runner with your Vercel project
+        - name: Pull Vercel project settings
+          # >: GitHub combines them into one command before running it
+          # This downloads your Vercel project configuration
+          run: >
+            vercel pull
+            --yes
+            --environment=production
+            --token=${{ secrets.VERCEL_TOKEN }}
+          # env: This creates temporary environment variables for this step
+          env:
+            # The values tell Vercel exactly which project should receive the deployment
+            VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+            VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+        # This creates the production build that Vercel will deploy
+        - name: Build project for Vercel
+          # vercel build: This is similar to running npm run build
+          # --prod: This tells Vercel to create a production build instead of a preview build
+          # --token=: authenticates the CLI
+          run: >
+            vercel build
+            --prod
+            --token=${{ secrets.VERCEL_TOKEN }}
+          # so Vercel knows which project to build
+          env:
+            VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+            VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+        # The final deployment step
+        - name: Deploy project to Vercel
+          # vercel deploy: Uploads the completed production build to Vercel
+          # --prebuilt: Vercel uses the build already created
+          # --prod: Deploys directly to the production website
+          # --token=: Authenticates once more
+          run: >
+            vercel deploy
+            --prebuilt
+            --prod
+            --token=${{ secrets.VERCEL_TOKEN }}
+          # Vercel knows exactly where to deploy
+          env:
+            VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+            VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
