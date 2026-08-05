@@ -4,7 +4,7 @@
 
 This project is a modern e-commerce web application built with **React**, **TypeScript**, **Firebase**, **Redux Toolkit**, and **React Query**. Users can browse products, register and log in with Firebase Authentication, manage a shopping cart, create orders, and view order details.
 
-This project expands upon the previous Advanced React E-Commerce application by implementing **Test-Driven Development (TDD)**, **Continuous Integration (CI)**, and **Continuous Deployment (CD)** using **GitHub Actions** and **Vercel**. Every push to the `main` branch automatically runs the test suite, builds the application, and deploys a new production version after all checks pass successfully. This follows the recommended GitHub Actions and Vercel deployment workflow. :contentReference[oaicite:0]{index=0}
+This project expands upon the previous Advanced React E-Commerce application by implementing **Test-Driven Development (TDD)**, **Continuous Integration (CI)**, and **Continuous Deployment (CD)** using **GitHub Actions** and **Vercel**. Every push to the `main` branch automatically runs the test suite, builds the application, and deploys a new production version after all checks pass successfully. This follows the recommended GitHub Actions and Vercel deployment workflow.
 
 ---
 
@@ -184,7 +184,7 @@ Deployment is authenticated using GitHub repository secrets:
 - `VERCEL_ORG_ID`
 - `VERCEL_PROJECT_ID`
 
-Firebase configuration is provided through Vercel Environment Variables, keeping sensitive credentials out of the source code. This deployment approach follows Vercel's recommended GitHub Actions workflow using `vercel pull`, `vercel build`, and `vercel deploy --prebuilt`. :contentReference[oaicite:1]{index=1}
+Firebase configuration is provided through Vercel Environment Variables, keeping sensitive credentials out of the source code. This deployment approach follows Vercel's recommended GitHub Actions workflow using `vercel pull`, `vercel build`, and `vercel deploy --prebuilt`.
 
 ---
 
