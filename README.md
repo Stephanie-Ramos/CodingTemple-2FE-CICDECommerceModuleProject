@@ -1,284 +1,109 @@
-# Firebase E-Commerce Application
+# Advanced React E-Commerce Application with CI/CD
 
-## Overview
+## Project Description
 
-This project is a React + TypeScript e-commerce application built as part of the Coding Temple Front-End Engineering curriculum. The application began as an advanced e-commerce app that consumed data from the FakeStore API. It was later migrated to Firebase, replacing the external API with Firestore and Firebase Authentication while preserving the original shopping experience.
+This project is a modern e-commerce web application built with **React**, **TypeScript**, **Firebase**, **Redux Toolkit**, and **React Query**. Users can browse products, register and log in with Firebase Authentication, manage a shopping cart, create orders, and view order details.
 
-The application allows users to register, log in, manage their profile, browse products stored in Firestore, manage a shopping cart, place orders, and review their order history.
-
----
-
-## Learning Objectives
-
-This project demonstrates how to:
-
-- Integrate Firebase Authentication into a React application
-- Store and retrieve data using Cloud Firestore
-- Perform full CRUD operations with Firestore
-- Manage application state using Redux Toolkit
-- Fetch asynchronous data with React Query
-- Navigate between pages using React Router
-- Build responsive layouts with Bootstrap
-- Store shopping cart data using Session Storage
-- Organize a scalable React application using reusable components and services
+This project expands upon the previous Advanced React E-Commerce application by implementing **Test-Driven Development (TDD)**, **Continuous Integration (CI)**, and **Continuous Deployment (CD)** using **GitHub Actions** and **Vercel**. Every push to the `main` branch automatically runs the test suite, builds the application, and deploys a new production version after all checks pass successfully. This follows the recommended GitHub Actions and Vercel deployment workflow. :contentReference[oaicite:0]{index=0}
 
 ---
 
-# Technologies Used
+## Live Vercel Application
 
-- React
-- TypeScript
-- Vite
-- Firebase Authentication
-- Cloud Firestore
-- React Router DOM
-- Redux Toolkit
-- React Redux
-- React Query (TanStack Query)
-- Axios
-- Bootstrap 5
+https://cicd-ecommerce.vercel.app/
 
 ---
 
-# Features
+## GitHub Repository
 
-## Authentication
-
-Users can:
-
-- Register using email and password
-- Log into an existing account
-- Log out securely
-- Authenticate with Firebase Authentication
-
-During registration:
-
-- A Firebase Authentication account is created.
-- A corresponding user document is created in the Firestore `users` collection.
+https://github.com/Stephanie-Ramos/CodingTemple-2FE-CICDECommerceModuleProject
 
 ---
 
-## User Profile Management
+## Features
 
-Each authenticated user has a profile stored in Firestore.
+### Product Management
 
-Users can:
-
-- View their profile
-- Update profile information
-  - Name
-  - Address
-- Delete their profile
-- Delete their Firebase Authentication account
-
----
-
-## Product Management
-
-Unlike the previous version that consumed the FakeStore API, this application stores products inside Cloud Firestore.
-
-Features include:
-
-- View all products
+- Display products stored in Firebase Firestore
 - Filter products by category
 - Add new products
 - Edit existing products
 - Delete products
 
-Products are stored in the Firestore `products` collection.
+### User Authentication
 
----
+- Register new users
+- Login and logout with Firebase Authentication
+- Update user profile
+- Delete user account
 
-## Shopping Cart
+### Shopping Cart
 
-Redux Toolkit manages the shopping cart.
-
-Users can:
-
-- Add products to the cart
+- Add products to cart
 - Remove products
-- Increase quantity
-- Decrease quantity
-- View total items
-- View total price
+- Update product quantities
+- Persist cart using sessionStorage
+- Automatically calculate total items and total price
 
-The cart is persisted using Session Storage.
+### Order Management
 
----
-
-## Order Management
-
-When users complete checkout:
-
-- The order is stored in Firestore.
-- The shopping cart is cleared.
-- Users are redirected directly to the newly created Order Details page.
-
-Each order stores:
-
-- User ID
-- Order creation date
-- Products
-- Quantities
-- Total price
-
-Orders are stored in the Firestore `orders` collection.
+- Checkout products
+- Save completed orders to Firebase Firestore
+- View Order Details page
 
 ---
 
-## Order History
+# Technologies Used
 
-Authenticated users can:
-
-- View all previous orders
-- Open individual order details
-- View:
-  - Products purchased
-  - Quantity
-  - Price
-  - Order date
-  - Total cost
-
----
-
-## Responsive Navigation
-
-The application includes a responsive Bootstrap navigation bar.
-
-Desktop navigation displays:
-
-- Home
-- Cart
-- Add Product
-- Orders
-- Profile
-- Register
-- Login
-- Logout
-
-On smaller devices:
-
-- Navigation collapses into a Bootstrap hamburger menu.
-
-Navigation automatically updates depending on whether the user is logged in.
+- React 19
+- TypeScript
+- Vite
+- React Router
+- Redux Toolkit
+- React Redux
+- React Query
+- Firebase Authentication
+- Firebase Firestore
+- Bootstrap 5
+- Jest
+- React Testing Library
+- GitHub Actions
+- Vercel
 
 ---
 
-# Firebase Collections
+# Installation Instructions
 
-The application uses three Firestore collections.
-
-## users
-
-Stores profile information.
-
-Example:
-
-```text
-users
- └── uid
-      ├── email
-      ├── name
-      ├── address
-      └── createdAt
-```
-
----
-
-## products
-
-Stores product catalog.
-
-Example:
-
-```text
-products
- └── productId
-      ├── title
-      ├── description
-      ├── category
-      ├── image
-      └── price
-```
-
----
-
-## orders
-
-Stores completed purchases.
-
-Example:
-
-```text
-orders
- └── orderId
-      ├── userId
-      ├── createdAt
-      ├── totalPrice
-      └── products[]
-```
-
----
-
-# Project Structure
-
-```text
-src
-│
-├── components
-│   ├── CategorySelect.tsx
-│   ├── Navbar.tsx
-│   ├── ProductCard.tsx
-│   ├── ProductForm.tsx
-│   ├── ProductList.tsx
-│   └── ShoppingCart.tsx
-│
-├── firebase
-│   ├── authService.ts
-│   ├── firebase.ts
-│   ├── orderService.ts
-│   ├── productService.ts
-│   └── userService.ts
-│
-├── pages
-│   ├── AddProduct.tsx
-│   ├── Cart.tsx
-│   ├── EditProduct.tsx
-│   ├── Home.tsx
-│   ├── Login.tsx
-│   ├── Orders.tsx
-│   ├── OrderDetails.tsx
-│   ├── Profile.tsx
-│   └── Register.tsx
-│
-├── redux
-│
-├── types
-│
-└── utils
-```
-
----
-
-# Running the Project
-
-## Clone the repository
+Clone the repository:
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git
+git clone https://github.com/Stephanie-Ramos/CodingTemple-2FE-CICDECommerceModuleProject.git
 ```
 
----
+Navigate into the project:
 
-## Install dependencies
+```bash
+cd cicd-ecommerce
+```
+
+Install project dependencies:
 
 ```bash
 npm install
 ```
 
----
+Create a `.env` file in the project root and add your Firebase configuration:
 
-## Start the development server
+```env
+VITE_FIREBASE_API_KEY=
+VITE_FIREBASE_AUTH_DOMAIN=
+VITE_FIREBASE_PROJECT_ID=
+VITE_FIREBASE_STORAGE_BUCKET=
+VITE_FIREBASE_MESSAGING_SENDER_ID=
+VITE_FIREBASE_APP_ID=
+```
+
+Start the development server:
 
 ```bash
 npm run dev
@@ -286,54 +111,117 @@ npm run dev
 
 ---
 
-# Firebase Configuration
+# Testing Instructions
 
-Create a Firebase project and enable:
+This project follows a **Test-Driven Development (TDD)** workflow using **Jest** and **React Testing Library**.
 
-- Firebase Authentication
-- Cloud Firestore
+### Unit Tests
 
-Update your Firebase configuration inside:
+The application includes unit tests for multiple components:
 
-```text
-src/firebase/firebase.ts
+- **ProductCard**
+  - Renders product information correctly.
+  - Adds a product to the Redux cart when the **Add to Cart** button is clicked.
+
+- **Register**
+  - Renders the registration form.
+  - Updates email and password inputs.
+  - Successfully registers a user and redirects to the Home page.
+
+### Integration Test
+
+The project includes an integration test that verifies interaction between **ProductCard** and **ShoppingCart**.
+
+The test confirms that:
+
+- The cart initially displays an empty state.
+- Clicking **Add to Cart** updates the Redux store.
+- ShoppingCart automatically re-renders.
+- Total Items updates correctly.
+- Total Price updates correctly.
+
+Run all tests with:
+
+```bash
+npm test
 ```
 
 ---
 
-# Migrating from the FakeStore API
+# Continuous Integration (CI)
 
-This project originally consumed product data from:
+Continuous Integration is implemented using **GitHub Actions**.
 
-- FakeStore API
+Every push or pull request to the `main` branch automatically:
 
-The application was migrated to Firebase by:
+- Installs project dependencies
+- Runs the complete Jest test suite
+- Builds the production application
+- Stops the workflow if any test or build fails
 
-- Importing the original FakeStore products into Firestore
-- Replacing all API calls with Firestore queries
-- Replacing authentication with Firebase Authentication
-- Replacing product CRUD operations with Firestore CRUD operations
-- Creating Firestore collections for users, products, and orders
-- Implementing persistent user profiles
-- Implementing order history stored in Firestore
+The workflow is located at:
 
----
-
-# Future Improvements
-
-Potential enhancements include:
-
-- Product image uploads using Firebase Storage
-- Product search
-- Product sorting
-- Wishlist/Favorites
-- Admin dashboard
-- Protected admin routes
-- Pagination
-- Product reviews
-- User avatars
-- Stripe payment integration
-- Dark mode
+```text
+.github/workflows/main.yml
+```
 
 ---
 
+# Continuous Deployment (CD)
+
+Continuous Deployment is implemented using **GitHub Actions** together with **Vercel**.
+
+After the **Test and Build** job completes successfully, GitHub Actions automatically:
+
+- Installs the Vercel CLI
+- Retrieves the Vercel project configuration
+- Builds the production application
+- Deploys the application to Vercel
+
+Deployment is authenticated using GitHub repository secrets:
+
+- `VERCEL_TOKEN`
+- `VERCEL_ORG_ID`
+- `VERCEL_PROJECT_ID`
+
+Firebase configuration is provided through Vercel Environment Variables, keeping sensitive credentials out of the source code. This deployment approach follows Vercel's recommended GitHub Actions workflow using `vercel pull`, `vercel build`, and `vercel deploy --prebuilt`. :contentReference[oaicite:1]{index=1}
+
+---
+
+# Project Structure
+
+```text
+src/
+├── components/
+├── firebase/
+├── pages/
+├── redux/
+├── services/
+├── test/
+├── types/
+├── utils/
+
+.github/
+└── workflows/
+    └── main.yml
+```
+
+---
+
+# Learning Objectives
+
+This project demonstrates:
+
+- React component architecture
+- TypeScript development
+- Firebase Authentication
+- Firestore CRUD operations
+- Redux Toolkit state management
+- React Query
+- Protected routing
+- Unit Testing with Jest
+- Integration Testing with React Testing Library
+- Continuous Integration with GitHub Actions
+- Continuous Deployment with Vercel
+
+---
